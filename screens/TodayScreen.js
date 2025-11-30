@@ -22,7 +22,10 @@ export default function TodayScreen({ navigation }) {
 
       <Text style={styles.streak}>연속 작성: 0일</Text>
 
-      <TouchableOpacity style={styles.writeBtn}>
+      <TouchableOpacity 
+        style={styles.writeBtn}
+        onPress={() => navigation.navigate("TodayJournal")}
+      >
         <Text style={styles.writeText}>오늘의 일기 쓰기</Text>
       </TouchableOpacity>
 
