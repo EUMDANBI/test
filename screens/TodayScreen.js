@@ -22,9 +22,8 @@ export default function TodayScreen({ navigation }) {
 
       <Text style={styles.streak}>연속 작성: 0일</Text>
 
-      <TouchableOpacity 
-        style={styles.writeBtn}
-        onPress={() => navigation.navigate("TodayJournal")}
+      <TouchableOpacity style={styles.writeBtn}
+         onPress={() => navigation.navigate("TodayJournal")}    
       >
         <Text style={styles.writeText}>오늘의 일기 쓰기</Text>
       </TouchableOpacity>
@@ -36,7 +35,8 @@ export default function TodayScreen({ navigation }) {
         <Text style={styles.menuText}>지난 일기 보기</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.menuBtn}>
+      <TouchableOpacity style={styles.menuBtn}
+        onPress={() => navigation.navigate("Calendar")}  >
         <Text style={styles.menuText}>히트맵 달력 보기</Text>
       </TouchableOpacity>
     </View>
