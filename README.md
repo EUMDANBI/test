@@ -1,7 +1,9 @@
 0. 프로젝트 홈
 한 줄 소개: 감정 분석 + 응원 카드 + 펫 성장형 일기 앱 (MyPetApp)
 
-대표 스크린샷 1~2장
+대표 스크린샷
+<img src = "https://github.com/user-attachments/assets/93084dd5-0e76-4537-adad-150adfa794bd" width="30%" height="40%">
+<img src = "https://github.com/user-attachments/assets/459729e1-ff61-4859-a37e-20c5d20b6895" width="30%" height="40%">
 
 빠른 링크
 
