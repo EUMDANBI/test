@@ -18,17 +18,59 @@ null
 + 홈화면 : 펫 이미지 수정 가능, [일기 쓰기, 지난 일기, 달력 보기, 사진첩, 펫 로그] 버튼
 + 일기 쓰기 : 일기를 쓰면 감정을 분석해 위로의 말과 기분에 맞는 배경과 BGM 제공, 저장, 미래의 나에게 편지를 남길 수 있다.
 + 지난 일기 : 일기를 썼던 날짜와 시간을 확인 하며 그날 어떤 느낌의 감정이였는지 확인이 가능하고 여러개 선택해 삭제가 가능 하다.
-+ 일기 상세 : 일기를 썼던 날짜와 시간, 내용, 위로 / 응원 문구 및 사진을 확인 할 수 있다. 이전 일기 혹은 다음 일기도 있으면 확인 가능하다.
++ 일기 상세 : 일기를 썼던 날짜와 시간, 내용, 위로 / 응원 문구 및 사진을 확인 할 수 있다.
+   이전 일기 혹은 다음 일기도 있으면 확인 가능하다.
 + 달력 보기 : 일기를 언제 썻는지 얼마나 자주 썻는지 확인 할 수 있다.
 + 사진첩 : 일기 쓰고 위로/응원 글을 받았던 사진들이 배열 되어 있어 누르면 다시 확인 가능하다.
 + 펫 로그 : 펫 이름을 수정 할 수 있고, 최근 감정이 어땟는지 활동은 얼마나 했었는지 그리고 일기는 얼마나 썻었는지를 확인 할 수 있다.
-           [감정 테스트 기록 초기화, 펫 상태 초기화, 지난 일기, 감정 분석 로그] 버튼
-+ 일기 감정의 통계를 볼 수 있고 감정 태그 사용 횟수를 통해 본인이 어떤 감정들을 잘 느꼈는지 살펴볼 수 있다. 
+  [감정 테스트 기록 초기화, 펫 상태 초기화, 지난 일기, 감정 분석 로그] 버튼
++ 일기 감정의 통계를 볼 수 있고 감정 태그 사용 횟수를 통해 본인이 어떤 감정들을 잘 느꼈는지 살펴볼 수 있다.
 자유 텍스트 감정 테스트로 본인의 지금 상태를 적어 어떤 감정인지 AI에게 분석을 요구하고 결과를 볼 수 있다.
 
+### 기술 스택 / 설치
+#### 개발 환경(PC)
 
-기술 스택 / 설치
+Node.js (LTS)
 
+JDK 17
+
+Android Studio (Android SDK 35, NDK 27.1.12297006, CMake 3.22.1)
+
+Visual Studio Code
+
+#### 실제 Android 기기 또는 에뮬레이터
+
+프로젝트 생성 / 실행
+>프로젝트 생성:
+
+npx create-expo-app .
+
+>일반 실행(Expo Go 또는 개발 빌드용):
+
+npx expo start
+
+주요 라이브러리
+>로컬 저장:
+
+npx expo install @react-native-async-storage/async-storage
+
+>네비게이션:
+
+npm install @react-navigation/native @react-navigation/native-stack
+
+npx expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context
+
+>애니메이션 / 오디오:
+
+npx expo install lottie-react-native
+
+npx expo install expo-av
+
+>(선택) 개발 빌드:
+
+npx expo install expo-dev-client
+
+npm install -g eas-cli 후 eas build --platform android --profile development
 데이터 구조 / 동기화
 
 개발 로그 / TODO
