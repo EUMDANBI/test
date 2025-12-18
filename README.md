@@ -301,7 +301,7 @@ npm install -g eas-cli 후 eas build --platform android --profile development
 
 ### 주요 저장 키
 
-journals: 날짜별 일기, 감정, 타임캡슐, 메타데이터
+journals: 날짜별 일기, 감정, 타임캡슐, 메타데이터(날짜/시간, 글자 수, 점수, XP 등 일기를 둘러싼 모든 부가 정보들)
 
 pet: 펫 상태 (name, level, xp, maxXp, intimacy, mood, streak, imageKey 등)
 
@@ -311,60 +311,57 @@ supportQueue: 응원 메시지 재전송 큐
 
 lastTimeCapsuleShownDate: 오늘 타임캡슐 팝업 표시 여부
 
+future_letters : 미래 편지 기능에서 쓰는 배열(각 편지의 id, text, targetDate, createdDate, viewedDate 등)
+
 ### 유틸 함수 요약
-getTodayLocalDate()
 
-오늘 날짜를 YYYY-MM-DD 문자열로 반환.
+1. getTodayLocalDate()
+ + 오늘 날짜를 YYYY-MM-DD 문자열로 반환.
 
-calcStreakFromJournals(journals)
+2. calcStreakFromJournals(journals)
 
-journals의 날짜를 기준으로, 오늘부터 거꾸로 “중간에 빈 날 나오기 전까지” 연속 작성일을 세고,
+ + journals의 날짜를 기준으로, 오늘부터 거꾸로 “중간에 빈 날 나오기 전까지” 연속 작성일을 세고, (오늘 포함 연속일 - 1)을 streak 숫자로 반환.
 
-(오늘 포함 연속일 - 1)을 streak 숫자로 반환.
+3. showTodayTimeCapsuleOnce(navigation)
 
-showTodayTimeCapsuleOnce(navigation)
+ + 오늘 날짜의 openDate를 가진 타임캡슐이 있으면, 그중 하나를 랜덤으로 골라 Alert로 보여줌. __= 오늘 자의 편지가 여러개 있으면 랜덤으로 출력__
 
-오늘 날짜의 openDate를 가진 타임캡슐이 있으면, 그중 하나를 랜덤으로 골라 Alert로 보여줌.
+ + 닫을 때 lastTimeCapsuleShownDate를 오늘로 저장해서 “하루에 한 번만” 뜨도록 제어. __= 뜬 날은 다시 안 뜨게 하는 “하루 한 번만 팝업” 제어용 함수__
 
-닫을 때 lastTimeCapsuleShownDate를 오늘로 저장해서 “하루에 한 번만” 뜨도록 제어.
+4. syncPetFromServer() __= 펫 동기화 함수__
 
-syncPetFromServer()
+ + GET /pet 호출 → 서버 pet 데이터 수신. __= 서버에 펫 데이터 가져오기__
 
-GET /pet 호출 → 서버 pet 데이터 수신.
+ + maxXp 없으면 100, imageKey 없으면 기본값으로 보정. __= 서버에 펫 데이터 채워넣기__
 
-maxXp 없으면 100, imageKey 없으면 기본값으로 보정.
-
-AsyncStorage "pet"에 저장하고, setPet으로 TodayScreen의 펫 상태를 갱신.
+ + AsyncStorage "pet"에 저장하고, setPet으로 TodayScreen의 펫 상태를 갱신. __= 최신 펫 상태(임시저장소)에 저장하고 펫 상태 세팅__
 
 # 5. 렌더링 / useEffect 메모
 렌더링:
 
-현재 state/props를 기준으로 UI 모양을 계산하고, 실제 화면에 반영하는 과정.
++ UI 모양을 계산하고, 실제 화면에 반영하는 과정.
 
-TodayScreen에서 pet 상태가 바뀌면, 렌더링이 다시 일어나 펫 카드 UI가 새 값으로 그려짐.
++ TodayScreen(홈)에서 pet 상태가 바뀌면, 렌더링이 다시 일어나 펫 카드 UI가 새 값으로 그려지는 과정.
 
 useEffect:
 
-“렌더링이 끝난 뒤에 실행할 작업”을 등록하는 훅.
-
-예:
-
-화면 처음 마운트될 때 syncPetFromServer() 호출.
-
-화면 포커스 시 showTodayTimeCapsuleOnce() 호출.
++ “렌더링이 끝난 뒤에 실행할 작업”을 등록하는 훅.
+  
++ UI가 다 표시 되고 나서 수행할 명령어들 혹은 함수들의 모음
+>>예:
+>>>화면 처음 될 때 syncPetFromServer() 호출. __= 화면이 처음 뿌려질 때 서버에서 펫 데이터 가져와서 초기 펫 상태 세팅/동기화하는 함수__
+>>>
+>>>화면 포커스 시 showTodayTimeCapsuleOnce() 호출. __= 오늘 처음이면 팝업 한 번 보여주고, 이미 봤으면 아무 것도 안 하는 제어 로직 인 함수__
 
 # 6. 개발 로그 / TODO
 개발 로그(테이블): 날짜 / 작업 / 관련 화면 / 상태(진행중·완료)
 
-자주 마주친 에러와 메모:
+#### 자주 마주친 에러와 메모:
+ No development build (com.mypetapp) → 개발 빌드 미설치, EAS로 빌드 후 설치 필요.
 
-No development build (com.mypetapp) → 개발 빌드 미설치, EAS로 빌드 후 설치 필요.
+ PowerShell에서 eas 인식 안 됨 → npm install -g eas-cli 후 새 터미널 열기.
 
-PowerShell에서 eas 인식 안 됨 → npm install -g eas-cli 후 새 터미널 열기.
-
-TODO 예시:
-
-EmotionAnalysisScreen 시각화 강화
+#### TODO:
 
 펫 이미지 종류/스킨 추가
 
