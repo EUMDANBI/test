@@ -1,15 +1,21 @@
 # 0. 프로젝트 홈
-한 줄 소개: 감정 분석 + 응원 카드 + 펫 성장형 일기 앱 (MyPetApp)
+>#### 한 줄 소개: 감정 분석 + 응원 카드 + 펫 성장형 일기 앱 (MyPetApp)
 
 대표 스크린샷
+
 <img src = "https://github.com/user-attachments/assets/93084dd5-0e76-4537-adad-150adfa794bd" width="30%" height="40%">
 <img src = "https://github.com/user-attachments/assets/459729e1-ff61-4859-a37e-20c5d20b6895" width="30%" height="40%">
 
 빠른 링크
+null
 
-개요 / 사용자 플로우
+#### 개요 / 사용자 플로우
+1. 오늘의 나의 감정 및 경험을 기반하여 하루 일기를 작성한다.
+2. 하루 일기에서 쓰여진 내용과 기분 선택을 통해 감정을 분석해준다.
+3. 감정에 따라 알맞는 BGM 및 배경들이 나오고 분석한 나의 감정들과 그에 알맞는 말들이 나온다.
 
-화면별 정리
+#### 화면별 정리
++ 홈화면 :
 
 기술 스택 / 설치
 
