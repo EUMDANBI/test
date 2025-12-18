@@ -27,8 +27,8 @@ null
 + 일기 감정의 통계를 볼 수 있고 감정 태그 사용 횟수를 통해 본인이 어떤 감정들을 잘 느꼈는지 살펴볼 수 있다.
 자유 텍스트 감정 테스트로 본인의 지금 상태를 적어 어떤 감정인지 AI에게 분석을 요구하고 결과를 볼 수 있다.
 
-### 기술 스택 / 설치
-#### 개발 환경(PC)
+## 기술 스택 / 설치
+### 개발 환경(PC)
 
 Node.js (LTS)
 
@@ -38,9 +38,9 @@ Android Studio (Android SDK 35, NDK 27.1.12297006, CMake 3.22.1)
 
 Visual Studio Code
 
-#### 실제 Android 기기 또는 에뮬레이터
+### 실제 Android 기기 또는 에뮬레이터
 
-프로젝트 생성 / 실행
+#### 프로젝트 생성 / 실행
 >프로젝트 생성:
 
 npx create-expo-app .
@@ -49,7 +49,7 @@ npx create-expo-app .
 
 npx expo start
 
-주요 라이브러리
+#### 주요 라이브러리
 >로컬 저장:
 
 npx expo install @react-native-async-storage/async-storage
@@ -71,34 +71,71 @@ npx expo install expo-av
 npx expo install expo-dev-client
 
 npm install -g eas-cli 후 eas build --platform android --profile development
-데이터 구조 / 동기화
 
-개발 로그 / TODO
+### 데이터 구조 / 동기화
+
+ #### 클라이언트 화면 [React Native 앱 (Expo)]
+ 
+ ├─ UI Screen 레이어
+ 
+ ├─ AsyncStorage (로컬 데이터)
+ 
+ └─ API Client (fetch, API_BASE)
+ 
+#### 백엔드 서버 (Node.js + Express + TypeScript)
+
+   ├─ API 라우터 (/journals, /pet, /ai-support, /support-message, /analyze, /health)
+   
+   ├─ 도메인 서비스 (Journal / Pet / Support / Emotion)
+   
+   ├─ OpenAI 클라이언트 (callOpenAIChat)
+   
+   └─ 인메모리 저장소(Map)  ← (추후 DB로 교체 예정)
+   
+#### [OpenAI  API]
+ - gpt-4.1-mini 모델로 감정 분석/응원 생성
+
+#### 개발 로그 / TODO
+1. 웹/모바일 동기화 버그 정리: 사진첩, 큐(syncSupportQueue), 
+펫 동기화 404/500 같은 자잘한 로그를 한 번에 싹 정리.
+
+2. UX 폴리싱: 로딩 상태·에러 문구·토스트, 진입 애니메이션, 
+감정/펫 설명 텍스트를 조금 더 따듯한 친구나 사람처럼 설정하여 완성도 올리기.
+
+3. 감정 통계/리포트 화면: 한 달 감정 비율, 평균 기분 점수, 
+자주 등장한 키워드 등을 그래프로 보여주기.
+
+4. 추천 루틴: “이럴 때 이런 행동 해보자” 같은 간단한 행동 제안
+(산책, 수면, 스트레칭 등)을 감정에 맞춰 붙이는 기능.
+
+5. DB: DB를 이용하여 더 다양한 상황을 예측하여 사용자에게 원활한 서비스 제공
 
 # 1. 개요 / 사용자 플로우
-프로젝트 목적
-매일 일기를 쓰게 도와주는 감정/응원 중심 앱
+### 프로젝트 목적
+일기 써서 위로/응원 + 펫 성장 + 감정 분석을 함으로서 힐링하는 것
 
 사용자 감정 기록 + 응원 메시지 + 펫 성장 경험 제공
 
-주요 사용자 플로우
-Today → TodayJournal → Support → PhotoGallery / Past / Calendar / PetLog / EmotionAnalysis
+### 주요 사용자 플로우
+홈 화면(Today) → 일기 쓰기(TodayJournal) → 위로/응원(Support) 
+
+→ 사진첩(PhotoGallery) / 지난 일기(Past) / 달력(Calendar) / 펫 로그(PetLog) / 감정 분석 로그(EmotionAnalysis)
 
 앱 진입 시:
 
 펫 상태 불러오기 (로컬 + 서버 동기화)
 
-오늘 타임캡슐 편지 있으면 하루에 한 번 팝업
+오늘 타임캡슐 편지 있으면 일기 쓰기 전 하루에 한 번 팝업
 
 # 2. 화면별 정리
 각 화면은 아래 형식으로 서브 페이지 만들기.
 
-TodayScreen
+홈 화면(TodayScreen)
 역할: 오늘 메인 허브 + 펫 상태 카드
 
 주요 내용:
 
-펫 상태 카드: name, level, xp, maxXp, intimacy, mood, streak, imageKey
+펫 상태 카드: 이름(name), (level, xp, maxXp, intimacy, mood, streak, imageKey
 
 오늘 일기 쓰기, 지난 일기(Past), 달력(Calendar), 사진첩(PhotoGallery), 펫 로그(PetLog), 감정 분석(EmotionAnalysis)로 이동하는 버튼
 
