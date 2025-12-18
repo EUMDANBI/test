@@ -1,4 +1,4 @@
-0. 프로젝트 홈
+# 0. 프로젝트 홈
 한 줄 소개: 감정 분석 + 응원 카드 + 펫 성장형 일기 앱 (MyPetApp)
 
 대표 스크린샷
@@ -17,7 +17,7 @@
 
 개발 로그 / TODO
 
-1. 개요 / 사용자 플로우
+# 1. 개요 / 사용자 플로우
 프로젝트 목적
 매일 일기를 쓰게 도와주는 감정/응원 중심 앱
 
@@ -32,7 +32,7 @@ Today → TodayJournal → Support → PhotoGallery / Past / Calendar / PetLog /
 
 오늘 타임캡슐 편지 있으면 하루에 한 번 팝업
 
-2. 화면별 정리
+# 2. 화면별 정리
 각 화면은 아래 형식으로 서브 페이지 만들기.
 
 TodayScreen
@@ -143,7 +143,7 @@ journals에 저장된 감정(기본 감정 + AI 분석 감정)을 집계
 
 “연속으로 우울한 날”, “연속으로 평온한 날” 같은 감정 스트릭 보여주기
 
-3. 기술 스택 / 설치
+# 3. 기술 스택 / 설치
 개발 환경(PC)
 Node.js (LTS)
 
@@ -187,7 +187,7 @@ npx expo install expo-dev-client
 
 npm install -g eas-cli 후 eas build --platform android --profile development
 
-4. 데이터 구조 / 핵심 유틸 함수
+# 4. 데이터 구조 / 핵심 유틸 함수
 주요 저장 키
 journals: 날짜별 일기, 감정, 타임캡슐, 메타데이터
 
@@ -224,7 +224,7 @@ maxXp 없으면 100, imageKey 없으면 기본값으로 보정.
 
 AsyncStorage "pet"에 저장하고, setPet으로 TodayScreen의 펫 상태를 갱신.
 
-5. 렌더링 / useEffect 메모
+# 5. 렌더링 / useEffect 메모
 렌더링:
 
 현재 state/props를 기준으로 UI 모양을 계산하고, 실제 화면에 반영하는 과정.
@@ -241,7 +241,7 @@ useEffect:
 
 화면 포커스 시 showTodayTimeCapsuleOnce() 호출.
 
-6. 개발 로그 / TODO
+# 6. 개발 로그 / TODO
 개발 로그(테이블): 날짜 / 작업 / 관련 화면 / 상태(진행중·완료)
 
 자주 마주친 에러와 메모:
