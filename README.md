@@ -130,116 +130,131 @@ npm install -g eas-cli 후 eas build --platform android --profile development
 # 2. 화면별 정리
 각 화면은 아래 형식으로 서브 페이지 만들기.
 
-홈 화면(TodayScreen)
+### 홈 화면(TodayScreen)
+
 역할: 오늘 메인 허브 + 펫 상태 카드
 
 주요 내용:
 
-펫 상태 카드: 이름(name), (level, xp, maxXp, intimacy, mood, streak, imageKey
++ 펫 상태 카드: 이름(name), 레벨(level), 경험치(xp), 레벨업하기 위한 필요경험치(maxXp), 친밀도(intimacy), 기분(mood), 일기 하루하루 연속적으로 쓴 횟수(streak), 펫 이미지 변환하기 위해 필요한 키값(imageKey)
 
-오늘 일기 쓰기, 지난 일기(Past), 달력(Calendar), 사진첩(PhotoGallery), 펫 로그(PetLog), 감정 분석(EmotionAnalysis)로 이동하는 버튼
++ 오늘 일기 쓰기, 지난 일기(Past), 달력(Calendar), 사진첩(PhotoGallery), 펫 로그(PetLog), 감정 분석(EmotionAnalysis)로 이동하는 버튼
 
 특이 로직:
 
-앱 진입 시:
+* 앱 진입 시:
 
-syncPetFromServer()로 서버의 pet 데이터를 가져와 로컬(AsyncStorage "pet")과 상태에 반영
+ > 1. syncPetFromServer()로 서버의 pet 데이터를 가져와 로컬(AsyncStorage "pet")과 상태에 반영&nbsp; __= 펫 상태 동기화__
+ > 2. calcStreakFromJournals(journals)로 연속 작성일 계산 후 펫 streak 갱신&nbsp; __= 연속 작성일 동기화__
 
-calcStreakFromJournals(journals)로 연속 작성일 계산 후 펫 streak 갱신
+### TodayJournalScreen (오늘 일기)
 
-TodayJournalScreen (오늘 일기)
 역할: 오늘 일기 작성 화면
 
 주요 내용:
 
-텍스트 입력, 글자 수, 저장 버튼
+ + [텍스트 입력, 글자 수, 저장] 버튼
 
-감정 선택 버튼들(슬픔, 분노, 불안, 차분, 기쁨, 사랑)
+ + 감정 선택 버튼들(슬픔, 분노, 불안, 차분, 기쁨, 사랑)
 
-미래의 나에게 쓰는 타임캡슐 편지 입력 영역(옵션)
+ + 미래의 나에게 쓰는 타임캡슐 편지 입력 영역(옵션)
 
 특이 로직:
 
-저장 시:
+ + 저장 시:
 
-journals에 오늘자 일기 추가/갱신 (AsyncStorage + 서버 동기화)
+> 1. journals에 오늘자 일기 추가/갱신 (AsyncStorage + 서버 동기화)&nbsp; __= 일기장에 일기(내부저장소 + 서버) 동기화__
+> 2. 감정이 비어 있으면 감정 분석 API 호출&nbsp; __= AI가 일기 내용 토대로 감정 분석 후 감정 자동 선택 기능__
+> 3. 일기 길이/스트릭 기준 XP 계산 → pet 업데이트&nbsp; __= 펫 경험치 동기화__
 
-감정이 비어 있으면 감정 분석 API 호출
+### SupportScreen (응원 카드)
 
-일기 길이/스트릭 기준 XP 계산 → pet 업데이트
-
-SupportScreen (응원 카드)
-역할: AI 응원 메시지 + 배경/음악 화면
+역할: AI 응원 메시지 + 배경사진/음악(BGM) 화면
 
 주요 내용:
 
-배경 이미지 + 카드형 응원 문장
++ 배경 이미지 + 카드형 응원 문장
 
-감정 키워드 태그(#불안, #분노 등)
++ 감정 키워드 태그(#불안, #분노 등)
 
-BGM 재생/정지 토글
++ BGM 재생/정지 토글
 
 특이 로직:
 
-응원 메시지 큐(supportQueue) 재시도, 서버에서 최신 응원 문장 가져와 표시
+ &nbsp; &nbsp;- 응원 메시지 큐(supportQueue) 재시도, 서버에서 최신 응원 문장 가져와 표시
 
-PhotoGalleryScreen (사진첩)
+### PhotoGalleryScreen (사진첩)
+
 역할: “응원 카드 사진첩” 화면
 
 주요 내용:
 
-photo_items를 그리드로 표시 (날짜, 배경 이미지, 응원 문장 요약)
++ photo_items를 그리드로 표시 (날짜, 배경 이미지 요약 화면)
 
-카드 탭 시 해당 일기의 Support 화면으로 이동
++ 카드 탭 시 해당 일기의 Support 화면으로 이동 (해당 날짜에 받은 위로/응원 카드 확인 가능)
 
-PastScreen (지난 일기)
+### PastScreen (지난 일기)
+
 역할: 지금까지 쓴 일기 목록
 
 주요 내용:
 
-journals를 날짜 순으로 리스트 표시
++ journals를 날짜 순으로 리스트 표시 (일기장 내용을 날짜 순으로..)
 
-각 항목에 날짜, 감정 아이콘/텍스트, 내용 일부 미리보기
++ 각 항목에 날짜, 감정 아이콘/텍스트, 내용 일부 미리보기
 
-탭 시 일기 상세/Support 화면으로 이동
++ 탭 시 일기 상세 화면으로 이동
+  
+### JournalDetailScreen (일기 상세)
 
-CalendarScreen (달력)
-역할: “달력으로 보는 기록/기분”
+역할: 해당 날짜에 쓴 일기 내용과 받았던 내용 표시
 
 주요 내용:
 
-한 달 달력에 일기 있는 날 표시
++ [날짜, 기분 점수, 얻었던 경험치 양, 일기 내용, 위로/응원 카드(BGM = X)] 표시
+  
++ 수정, 삭제 기능 (해당 내용을 누르면 [수정, 삭제] 버튼 활성화)
 
-스트릭/연속 작성일에 따라 색 진하기 등으로 시각화
+### CalendarScreen (달력)
 
-날짜 탭 시 해당 날짜의 일기 목록이나 Support로 이동
+역할: “달력으로 보는 기록”
 
-PetLogScreen (펫 로그)
+주요 내용:
+
++ 한 달 달력에 일기 있는 날 표시
+
++ 연속 작성일에 따라 색 진하기 등으로 시각화
+
++ 날짜 탭 시 해당 날짜의 일기 상세 화면으로 이동
+
+### PetLogScreen (펫 로그)
+
 역할: “펫 성장 기록/로그” 화면
 
 주요 내용:
 
-"pet" 상태(레벨, 총 XP, 연속 작성일 등)를 기준으로, 언제 XP를 얼마나 얻었는지 간단한 로그/리스트 표시
++ "pet" 상태(레벨, 총 XP, 연속 작성일 등)를 기준으로, 언제 XP를 얼마나 얻었는지 간단한 로그 표시
 
-“몇 일 연속 작성 → 스트릭 보너스 XP” 정보 텍스트/간단 그래프 정리
++ “몇 일 연속 작성 → 연속 작성 보너스 XP” 정보 텍스트/간단 그래프 정리
 
-사용자가 “최근에 얼마나 열심히 기록했는지”를 펫 성장 히스토리로 확인
++ 사용자가 “최근에 얼마나 열심히 기록했는지”를 펫 성장 히스토리로 확인
 
-EmotionAnalysisScreen (감정 분석 로그)
+### EmotionAnalysisScreen (감정 분석 로그)
+
 역할: “감정 테스트/자료 통계” 화면
 
 주요 내용:
 
-journals에 저장된 감정(기본 감정 + AI 분석 감정)을 집계
++ journals(일기장)에 저장된 감정(기본 감정 + AI 분석 감정)을 집계
 
-최근 7일/30일 감정 TOP3, 전체 감정 비율(슬픔/분노/불안/차분/기쁨/사랑 등)을 리스트 또는 차트로 표현
++ 최근 7일 감정 점수, 전체 감정 선택 횟 수(슬픔/분노/불안/차분/기쁨/사랑) 리스트 표시
 
-특정 감정 선택 시, 해당 감정이 기록된 일기 목록으로 이동해 일기/응원 카드 재확인
-
-“연속으로 우울한 날”, “연속으로 평온한 날” 같은 감정 스트릭 보여주기
++ “연속으로 우울한 날”, “연속으로 평온한 날” 같은 감정 스트릭 보여주기
 
 # 3. 기술 스택 / 설치
-개발 환경(PC)
+
+### 개발 환경(PC)
+
 Node.js (LTS)
 
 JDK 17
@@ -248,42 +263,44 @@ Android Studio (Android SDK 35, NDK 27.1.12297006, CMake 3.22.1)
 
 Visual Studio Code
 
-실제 Android 기기 또는 에뮬레이터
+### 실제 Android 기기 또는 에뮬레이터
 
-프로젝트 생성 / 실행
-프로젝트 생성:
+#### 프로젝트 생성 / 실행
+>프로젝트 생성:
 
 npx create-expo-app .
 
-일반 실행(Expo Go 또는 개발 빌드용):
+>일반 실행(Expo Go 또는 개발 빌드용):
 
 npx expo start
 
-주요 라이브러리
-로컬 저장:
+#### 주요 라이브러리
+>로컬 저장:
 
 npx expo install @react-native-async-storage/async-storage
 
-네비게이션:
+>네비게이션:
 
 npm install @react-navigation/native @react-navigation/native-stack
 
 npx expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context
 
-애니메이션 / 오디오:
+>애니메이션 / 오디오:
 
 npx expo install lottie-react-native
 
 npx expo install expo-av
 
-(선택) 개발 빌드:
+>(선택) 개발 빌드:
 
 npx expo install expo-dev-client
 
 npm install -g eas-cli 후 eas build --platform android --profile development
 
 # 4. 데이터 구조 / 핵심 유틸 함수
-주요 저장 키
+
+### 주요 저장 키
+
 journals: 날짜별 일기, 감정, 타임캡슐, 메타데이터
 
 pet: 펫 상태 (name, level, xp, maxXp, intimacy, mood, streak, imageKey 등)
@@ -294,7 +311,7 @@ supportQueue: 응원 메시지 재전송 큐
 
 lastTimeCapsuleShownDate: 오늘 타임캡슐 팝업 표시 여부
 
-유틸 함수 요약
+### 유틸 함수 요약
 getTodayLocalDate()
 
 오늘 날짜를 YYYY-MM-DD 문자열로 반환.
